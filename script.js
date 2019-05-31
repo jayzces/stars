@@ -11,8 +11,7 @@ const setAttributes = (el, attr) => {
 
 
 // animation function
-let counter = 0
-const moveStar = (path, line) => {
+const moveStar = (path, line, counter) => {
     let lineLength = line.getTotalLength()
     counter += 0.003
 
@@ -21,15 +20,13 @@ const moveStar = (path, line) => {
 
     path.setAttribute('transform', `translate(${x}, ${y})`)
 
-    if (counter < 0.8) {
-        requestAnimationFrame(() => moveStar(path, line))
+    if (counter < 1) {
+        requestAnimationFrame(() => moveStar(path, line, counter))
     } else {
-        // path.setAttribute('transform', 'translate(0, 0)')
-        // counter = 0
-        // let timeout = setTimeout(() => {
-        //     requestAnimationFrame(() => moveStar(path, line))
-        //     clearTimeout(timeout)
-        // }, (Math.random() * 250 + 1) * 100 )
+        path.setAttribute('transform', 'translate(0, 0)')
+        let timeout = setTimeout(() => {
+            requestAnimationFrame(() => moveStar(path, line, 0))
+        }, Math.floor(Math.random() * 5000))
     }
 }
 
@@ -71,7 +68,7 @@ const createStars = () => {
 const createShootingStars = () => {
     let shootingStarsGroup = document.createElementNS(nameSpace, 'g')
     let linesGroup = document.createElementNS(nameSpace, 'g')
-    let numberOfShootingStars = 1
+    let numberOfShootingStars = 6
 
     for (let i = 0; i < numberOfShootingStars; i++) {
         // shooting star
@@ -109,20 +106,21 @@ const createShootingStars = () => {
         setAttributes(path, {
             'fill': '#FFF',
             'd': `M${x0} ${y0}L${x1} ${y1}C${c1.cx1} ${c1.cy1} ${c1.cx2} ${c1.cy2} ${c1.cx} ${c1.cy}V${c1.cy}C${c2.cx1} ${c2.cy1} ${c2.cx2} ${c2.cy2} ${c2.cx} ${c2.cy}L${x0} ${y0}Z`,
+            'id': `star-${i}`
         })
 
         // path to outside the svg
         let line = document.createElementNS(nameSpace, 'path')
-        // line.setAttribute('d', `M${x0} ${y0}L${x0 + 420} ${y0 + 151.13}`)
         setAttributes(line, {
-            'stroke': 'red',
-            'd': `M${x0} ${y0}L${x0 + 420} ${y0 + 151.13}`
+            // 'stroke': 'red',
+            'd': `M${x0} ${y0}L${x0 + 420} ${y0 + 151.13}`,
+            'id': `star-path-${i}`
         })
 
         shootingStarsGroup.append(path)
         linesGroup.append(line)
 
-        requestAnimationFrame(() => moveStar(path, line))
+        requestAnimationFrame(() => moveStar(path, line, 0))
     }
 
     svg.append(linesGroup)
