@@ -1,4 +1,5 @@
 const svg = document.querySelector('.svg')
+const nameSpace = 'http://www.w3.org/2000/svg'
 
 
 // helper functions
@@ -9,15 +10,39 @@ const setAttributes = (el, attr) => {
 }
 
 
+// animation function
+let counter = 0
+const moveStar = (path, line) => {
+    let lineLength = line.getTotalLength()
+    counter += 0.003
+
+    let x = line.getPointAtLength(counter * lineLength).x - 20
+    let y = line.getPointAtLength(counter * lineLength).y - 20
+
+    path.setAttribute('transform', `translate(${x}, ${y})`)
+
+    if (counter < 0.8) {
+        requestAnimationFrame(() => moveStar(path, line))
+    } else {
+        // path.setAttribute('transform', 'translate(0, 0)')
+        // counter = 0
+        // let timeout = setTimeout(() => {
+        //     requestAnimationFrame(() => moveStar(path, line))
+        //     clearTimeout(timeout)
+        // }, (Math.random() * 250 + 1) * 100 )
+    }
+}
+
+
 // create stars
 const createStars = () => {
-    let starsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+    let starsGroup = document.createElementNS(nameSpace, 'g')
     let numberOfStars = 300
     let maxPos = 280
 
     for (let i = 0; i < numberOfStars; i++) {
         // circle
-        let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        let circle = document.createElementNS(nameSpace, 'circle')
         setAttributes(circle, {
             'r': 1,
             'cx': Math.floor(Math.random() * maxPos),
@@ -26,7 +51,7 @@ const createStars = () => {
         })
 
         // animation
-        let animation = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
+        let animation = document.createElementNS(nameSpace, 'animate')
         setAttributes(animation, {
             'attributeName': 'opacity',
             'values': '0; 1; 0',
@@ -44,13 +69,13 @@ const createStars = () => {
 
 // create shooting stars
 const createShootingStars = () => {
-    let shootingStarsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    let linesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    let numberOfShootingStars = 6
+    let shootingStarsGroup = document.createElementNS(nameSpace, 'g')
+    let linesGroup = document.createElementNS(nameSpace, 'g')
+    let numberOfShootingStars = 1
 
     for (let i = 0; i < numberOfShootingStars; i++) {
         // shooting star
-        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        let path = document.createElementNS(nameSpace, 'path')
 
         // starting and end points
         // must always -x & +y or +x & -y
@@ -82,13 +107,13 @@ const createShootingStars = () => {
         }
 
         setAttributes(path, {
-            'fill': 'green',
-            'd': `M${x0} ${y0}L${x1} ${y1}C${c1.cx1} ${c1.cy1} ${c1.cx2} ${c1.cy2} ${c1.cx} ${c1.cy}V${c1.cy}C${c2.cx1} ${c2.cy1} ${c2.cx2} ${c2.cy2} ${c2.cx} ${c2.cy}L${x0} ${y0}Z`
+            'fill': '#FFF',
+            'd': `M${x0} ${y0}L${x1} ${y1}C${c1.cx1} ${c1.cy1} ${c1.cx2} ${c1.cy2} ${c1.cx} ${c1.cy}V${c1.cy}C${c2.cx1} ${c2.cy1} ${c2.cx2} ${c2.cy2} ${c2.cx} ${c2.cy}L${x0} ${y0}Z`,
         })
 
-
         // path to outside the svg
-        let line = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        let line = document.createElementNS(nameSpace, 'path')
+        // line.setAttribute('d', `M${x0} ${y0}L${x0 + 420} ${y0 + 151.13}`)
         setAttributes(line, {
             'stroke': 'red',
             'd': `M${x0} ${y0}L${x0 + 420} ${y0 + 151.13}`
@@ -96,10 +121,12 @@ const createShootingStars = () => {
 
         shootingStarsGroup.append(path)
         linesGroup.append(line)
+
+        requestAnimationFrame(() => moveStar(path, line))
     }
 
-    svg.append(shootingStarsGroup)
     svg.append(linesGroup)
+    svg.append(shootingStarsGroup)
 }
 
 createStars()
