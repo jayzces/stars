@@ -1,6 +1,7 @@
 stars
 ========
-Really scuffed implementation of Day 42 of 100 Days of CSS.
+Really scuffed implementation of Day 42 of 100 Days of CSS. https://codepen.io/louisesagna/pen/JqewVO
+
 
 ## References
 - [Day 42](https://codepen.io/roydigerhund/pen/dMNrxP)
