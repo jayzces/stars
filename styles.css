@@ -1,0 +1,25 @@
+body {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.frame {
+    background-color: pink;
+    display: grid;
+    margin: auto;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    max-height: 400px;
+}
+
+.svg {
+    background-image: linear-gradient(to bottom, #1d4253 0%, #6bb5c4 100%);
+    display: block;
+    margin: auto;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+}
